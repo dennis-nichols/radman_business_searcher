@@ -26,11 +26,11 @@ app.add_middleware(
 
 
 @app.get("/")
-async def root(city: str = None, business_type: str = None):
+async def root(city: str = None, business_type: str = None, min_ratings: int = 100):
   
-  place_id_list = get_place_ids(city=city, business_type=business_type)
+  place_id_list = get_place_ids(city=city, business_type=business_type, min_ratings=min_ratings)
   
-  fields_list = ['name', 'formatted_address', 'website', 'formatted_phone_number', 'rating', 'user_ratings_total','url']
+  fields_list = ['website', 'user_ratings_total']
   fields = '%2C'.join(fields_list)
   
   results = []
@@ -49,9 +49,26 @@ async def root(city: str = None, business_type: str = None):
   column_values = {}
   for column in data_dict:
       column_values[column] = list(data_dict[column].values())
-  for index, address in enumerate(column_values['formatted_address']):
-      column_values['formatted_address'][index] = address.replace(",","").replace("#", "No. ")
-  
+  print(column_values['website'])
+  duplicate_indices = set()
+  seen = set()
+  for index, site in enumerate(column_values['website']):
+      if type(site) != str:
+        column_values['website'][index] = 'No website'
+      else:
+        site = site.split("//")[-1].split("/")[0]
+        if "www." not in site:
+            site = "www." + site
+        if site in seen:
+            duplicate_indices.add(index)
+        else:
+            seen.add(site)
+        column_values['website'][index] = site 
+      
+  for column in column_values:
+      column_values[column] = [value for i, value in enumerate(
+          column_values[column]) if i not in duplicate_indices]
+  print(column_values)
   # send the new dictionary to the front end
    # add the CORS headers to the response
   response = JSONResponse(content=column_values)

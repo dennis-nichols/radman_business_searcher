@@ -8,7 +8,7 @@ load_dotenv()
 key = os.getenv("PLACES_KEY")
 
 
-def get_place_ids(city: str = None, business_type: str = None, request_delay: float = 2.0):
+def get_place_ids(city: str = None, business_type: str = None, request_delay: float = 2.0, min_ratings: int = 100):
   """
   Takes in a city and a business type from the query and returns a list of place IDs from the Google Place Search API.
   """
@@ -29,6 +29,7 @@ def get_place_ids(city: str = None, business_type: str = None, request_delay: fl
       # set delay to make sure the API doesn't reject request
       time.sleep(request_delay)
       response_2 = requests.get(next_url).json()
+      # print(response_2)
       # Convert response_2 to a dataframe
       df_2 = pd.json_normalize(response_2["results"])
       df_list.append(df_2)  # Append df_2 to df_list
@@ -39,6 +40,7 @@ def get_place_ids(city: str = None, business_type: str = None, request_delay: fl
         # set delay to make sure the API doesn't reject request
         time.sleep(request_delay)
         response_3 = requests.get(next_url).json()
+        # print(response_3)
         # Convert response_3 to a dataframe
         df_3 = pd.json_normalize(response_3["results"])
         df_list.append(df_3)  # Append df_3 to df_list
@@ -46,7 +48,7 @@ def get_place_ids(city: str = None, business_type: str = None, request_delay: fl
   # Concatenate all dataframes in df_list together
   result_df = pd.concat(df_list, ignore_index=True)
   # filter to only businesses with at least 100 ratings
-  filtered_df = result_df.query("user_ratings_total > 100")
+  filtered_df = result_df.query(f"user_ratings_total > {min_ratings}")
 
   # get list of place ids to make API calls for more details
   place_id_list = filtered_df['place_id'].tolist()
