@@ -21,7 +21,7 @@ Follow these steps to get the backend API up and running on your local machine.
 - [FastAPI](https://fastapi.tiangolo.com/)
 - [Google Places API Key](https://developers.google.com/maps/gmp-get-started#create-project)
 
-###Installation
+### Installation
 
 1. Clone the repository
 2. Navigate to the backend directory
