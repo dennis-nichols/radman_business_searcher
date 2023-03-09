@@ -13,12 +13,8 @@ The backend API performs the following steps to retrieve information about busin
 
 ## Deployment
 
-The backend is hosted on [Google Cloud Run](https://cloud.google.com/run). Follow the documentation for Google Cloud Run to deploy the backend API.
+The backend is hosted on [Google Cloud Run](https://cloud.google.com/run) via a Docker container. Follow the documentation for Google Cloud Run to deploy the backend API. Ensure you have a correctly written Dockerfile in your source directory. ALSO when deploying the container to any cloud service, check the service settings to ensure it is listening on the correct HTTP (10000) to match the container.
 
 ## Contributing
 
 This project is open for contributions. Feel free to open an issue or submit a pull request.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
