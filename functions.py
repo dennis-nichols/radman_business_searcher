@@ -108,5 +108,5 @@ def get_place_details(place_id_list):
     for column in column_values:
         column_values[column] = [value for i, value in enumerate(
             column_values[column]) if i not in duplicate_indices]
-
+  
     return column_values
