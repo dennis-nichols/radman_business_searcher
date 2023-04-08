@@ -54,3 +54,59 @@ def get_place_ids(city: str = None, business_type: str = None, request_delay: fl
   place_id_list = filtered_df['place_id'].tolist()
   
   return place_id_list
+
+
+def get_place_details(place_id_list):
+    """
+    Retrieves place details for a list of place IDs using the Google Places API.
+    
+    Parameters:
+        place_id_list (list): A list of place IDs for which details are to be retrieved.
+    
+    Returns:
+        dict: A dictionary containing the values for each column of the retrieved place details.
+    """
+    # Define the fields to be retrieved
+    fields_list = ['website', 'user_ratings_total']
+    fields = '%2C'.join(fields_list)
+
+    # Retrieve place details for each place ID
+    results = []
+    for place_id in place_id_list:
+        details_url = f"https://maps.googleapis.com/maps/api/place/details/json?place_id={place_id}&fields={fields}&key={key}"
+        details_response = requests.get(details_url).json()['result']
+        results.append(details_response)
+
+    # Create a pandas DataFrame from the results
+    details_df = pd.json_normalize(results)
+
+    # Convert the DataFrame to a dictionary
+    data_dict = details_df.to_dict()
+
+    # Extract the values for each column and store them in a new dictionary
+    column_values = {}
+    for column in data_dict:
+        column_values[column] = list(data_dict[column].values())
+
+    # Process the 'website' column and identify duplicate websites
+    duplicate_indices = set()
+    seen = set()
+    for index, site in enumerate(column_values['website']):
+        if type(site) != str:
+            column_values['website'][index] = 'No website'
+        else:
+            site = site.split("//")[-1].split("/")[0]
+            if "www." not in site:
+                site = "www." + site
+            if site in seen:
+                duplicate_indices.add(index)
+            else:
+                seen.add(site)
+            column_values['website'][index] = site
+
+    # Remove duplicate entries from the column values
+    for column in column_values:
+        column_values[column] = [value for i, value in enumerate(
+            column_values[column]) if i not in duplicate_indices]
+
+    return column_values
