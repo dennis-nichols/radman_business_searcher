@@ -75,6 +75,8 @@ def get_place_details(place_id_list):
     for place_id in place_id_list:
         details_url = f"https://maps.googleapis.com/maps/api/place/details/json?place_id={place_id}&fields={fields}&key={key}"
         details_response = requests.get(details_url).json()['result']
+        if not details_response or 'website' not in details_response:
+            continue
         results.append(details_response)
 
     # Create a pandas DataFrame from the results
