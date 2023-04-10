@@ -13,10 +13,15 @@ import json
 
 load_dotenv()
 
-# Load the Service Account credentials
+service_account_info = {
+    "type": "service_account",
+    "private_key": os.environ.get("GOOGLE_PRIVATE_KEY").replace("\\n", "\n"),
+    "client_email": os.environ.get("GOOGLE_CLIENT_EMAIL"),
+    "token_uri": os.environ.get("GOOGLE_TOKEN_URI"),
+}
+
 creds = service_account.Credentials.from_service_account_info(
-    os.getenv("GOOGLE_SERVICE_ACCOUNT_FILE_DGN")
-)
+    service_account_info)
 
 sheets_instance = build("sheets", "v4", credentials=creds)
 spreadsheet_name = "Business Searcher Database"  # Replace with your spreadsheet name
