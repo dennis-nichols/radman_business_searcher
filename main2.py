@@ -19,7 +19,7 @@ service_account_info = {
     "client_email": os.environ.get("GOOGLE_CLIENT_EMAIL"),
     "token_uri": os.environ.get("GOOGLE_TOKEN_URI"),
 }
-
+print(len(service_account_info))
 creds = service_account.Credentials.from_service_account_info(
     service_account_info)
 
