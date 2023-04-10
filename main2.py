@@ -9,12 +9,13 @@ from googleapiclient.discovery import build
 from dotenv import load_dotenv
 from functions import get_place_ids, get_place_details
 import time
+import json
 
 load_dotenv()
 
 # Load the Service Account credentials
 creds = service_account.Credentials.from_service_account_file(
-    os.getenv("GOOGLE_SERVICE_ACCOUNT_FILE_DGN")
+    json.loads(os.getenv("GOOGLE_SERVICE_ACCOUNT_FILE_DGN"))
 )
 
 sheets_instance = build("sheets", "v4", credentials=creds)
