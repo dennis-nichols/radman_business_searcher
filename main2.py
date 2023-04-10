@@ -14,8 +14,8 @@ import json
 load_dotenv()
 
 # Load the Service Account credentials
-creds = service_account.Credentials.from_service_account_file(
-    json.loads(os.getenv("GOOGLE_SERVICE_ACCOUNT_FILE_DGN"))
+creds = service_account.Credentials.from_service_account_info(
+    os.getenv("GOOGLE_SERVICE_ACCOUNT_FILE_DGN")
 )
 
 sheets_instance = build("sheets", "v4", credentials=creds)
