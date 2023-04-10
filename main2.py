@@ -13,18 +13,22 @@ import json
 
 load_dotenv()
 
-service_account_info = {
-    "type": "service_account",
-    "private_key": os.environ.get("GOOGLE_PRIVATE_KEY"),
-    "client_email": os.environ.get("GOOGLE_CLIENT_EMAIL"),
-    "token_uri": os.environ.get("GOOGLE_TOKEN_URI"),
-}
-print("GOOGLE_PRIVATE_KEY:", os.environ.get("GOOGLE_PRIVATE_KEY"))
-print("GOOGLE_CLIENT_EMAIL:", os.environ.get("GOOGLE_CLIENT_EMAIL"))
-print("GOOGLE_TOKEN_URI:", os.environ.get("GOOGLE_TOKEN_URI"))
-creds = service_account.Credentials.from_service_account_info(
-    service_account_info)
+# service_account_info = {
+#     "type": "service_account",
+#     "private_key": os.environ.get("GOOGLE_PRIVATE_KEY"),
+#     "client_email": os.environ.get("GOOGLE_CLIENT_EMAIL"),
+#     "token_uri": os.environ.get("GOOGLE_TOKEN_URI"),
+# }
+# print("GOOGLE_PRIVATE_KEY:", os.environ.get("GOOGLE_PRIVATE_KEY"))
+# print("GOOGLE_CLIENT_EMAIL:", os.environ.get("GOOGLE_CLIENT_EMAIL"))
+# print("GOOGLE_TOKEN_URI:", os.environ.get("GOOGLE_TOKEN_URI"))
+# print(service_account_info)
+# creds = service_account.Credentials.from_service_account_info(
+#     service_account_info)
 
+# print(creds)
+service_account_file='/secrets/sheets_service_file'
+creds = service_account.Credentials.from_service_account_file(service_account_file)
 sheets_instance = build("sheets", "v4", credentials=creds)
 spreadsheet_name = "Business Searcher Database"  # Replace with your spreadsheet name
 
