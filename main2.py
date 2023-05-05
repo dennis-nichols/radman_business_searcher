@@ -131,14 +131,14 @@ async def root(city: str = None, business_type: str = None, min_ratings: int = 1
                 cities_df['population'] >= min_population)]
 
             for _, row in filtered_cities.iterrows():
-                city_name = row['city']
-                print(f"Searching for {business_type} in {city_name}, {state}")
+                city_name = row['city'] + ' ' + state
+                print(f"Searching for {business_type} in {city_name}")
 
                 # Get the place ID list based on city, business_type, and minimum ratings
                 place_id_list = get_place_ids(
                     city=city_name, business_type=business_type, min_ratings=min_ratings)
                 if not place_id_list:
-                    print(f"No results found for {city_name}, {state}")
+                    print(f"No results found for {city_name}")
                     continue
 
                 # Get place details based on the place ID list
