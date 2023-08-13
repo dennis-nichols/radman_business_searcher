@@ -95,6 +95,7 @@ async def update_or_insert_place(website: str, user_ratings_total: int, city: st
 
     response = request.execute()
     print(f"Inserted/Updated website: {website}, result: {response}")
+    time.sleep(1)
 
 
 async def update_places(city: str, state: str, business_type: str, place_details: dict):
