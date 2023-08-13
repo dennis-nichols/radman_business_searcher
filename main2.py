@@ -101,6 +101,8 @@ async def update_or_insert_place(website: str, user_ratings_total: int, city: st
 async def update_places(city: str, state: str, business_type: str, place_details: dict):
     counter = 0
     for website, user_ratings_total in zip(place_details['website'], place_details['user_ratings_total']):
+        if user_ratings_total != user_ratings_total:  # Check if it's NaN
+            user_ratings_total = None  # Or another default value like 0 or "N/A"
         await update_or_insert_place(website, user_ratings_total, city, state, business_type)
         counter += 1
     print(f"Processed {counter} rows.")
